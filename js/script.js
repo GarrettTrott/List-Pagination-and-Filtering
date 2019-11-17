@@ -2,9 +2,8 @@
 Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
-   
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
+// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
 
 /*** 
    Add your global variables that store the DOM elements you will 
@@ -17,8 +16,8 @@ FSJS project 2 - List Filter and Pagination
    scoped to that function.
 ***/
 
-
-
+const studentList = document.querySelectorAll(".student-item");
+const ItemsPerPage = 10;
 
 /*** 
    Create the `showPage` function to hide all of the items in the 
@@ -34,17 +33,20 @@ FSJS project 2 - List Filter and Pagination
        that will be passed into the parens later when you call or 
        "invoke" the function 
 ***/
-
-
-
-
+function showPage(list, pageNumber) {
+  const startIndex = pageNumber * ItemsPerPage - ItemsPerPage;
+  const endIndex = pageNumber * ItemsPerPage;
+  for (let i = 0; i < list.length; i++) {
+    if (i >= startIndex && i < endIndex) {
+      list[i].style.display = "";
+    } else {
+      list[i].style.display = "none";
+    }
+  }
+}
 /*** 
    Create the `appendPageLinks function` to generate, append, and add 
    functionality to the pagination buttons.
 ***/
-
-
-
-
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
