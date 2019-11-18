@@ -40,7 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ul.addEventListener("click", e => {
       const pageSelected = e.target.textContent;
+      const links = ul.querySelectorAll("a");
       showPage(studentList, pageSelected);
+      e.target.className = "active";
+      for (let i = 0; i < links.length; i++) {
+        if (links[i] !== e.target) {
+          links[i].className = "";
+        }
+      }
     });
     pageDiv.appendChild(div);
   }
