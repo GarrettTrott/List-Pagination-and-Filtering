@@ -4,6 +4,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const studentList = document.querySelectorAll(".student-item");
   const ItemsPerPage = 10;
 
+  const pageHeaderDiv = document.querySelector(".page-header");
+  const searchDiv = document.createElement("div");
+  const searchInput = document.createElement("input");
+  const searchButton = document.createElement("button");
+
+  searchButton.textContent = "Search";
+  searchInput.type = "text";
+  searchInput.placeholder = "Search for students..";
+  searchDiv.className = "student-search";
+  searchDiv.appendChild(searchInput);
+  searchDiv.appendChild(searchButton);
+  pageHeaderDiv.appendChild(searchDiv);
+
   // Function to find the list item indexes of a given page then hides other indexes
 
   const showPage = (list, pageNumber) => {
@@ -48,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-
+    // set first page button as active
     ul.firstChild.firstChild.className = "active";
     pageDiv.appendChild(div);
   };
