@@ -1,14 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Global variables for list elements and items to be displayed per page
 
-  const studentList = document.querySelectorAll(".student-item");
   const ItemsPerPage = 10;
+  const studentList = document.querySelectorAll(".student-item");
   const pageHeaderDiv = document.querySelector(".page-header");
+  const pageDiv = document.querySelector(".page");
+
+  // Search bar elements and styling
 
   const searchDiv = document.createElement("div");
   const searchInput = document.createElement("input");
   const searchButton = document.createElement("button");
   const studentNames = document.querySelectorAll("H3");
+  const noResult = document.createElement("h2");
 
   searchButton.textContent = "Search";
   searchInput.type = "text";
@@ -17,6 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   searchDiv.appendChild(searchInput);
   searchDiv.appendChild(searchButton);
   pageHeaderDiv.appendChild(searchDiv);
+  noResult.textContent = "No search results found";
+  noResult.style.color = "#888";
+  noResult.style.textAlign = "center";
+  noResult.style.display = "none";
+  pageDiv.appendChild(noResult);
 
   // Function to find the list item indexes of a given page then hides other indexes
 
@@ -36,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const appendPageLinks = list => {
     const numberOfPages = list.length / ItemsPerPage;
-    const pageDiv = document.querySelector(".page");
     const div = document.createElement("div");
     const ul = document.createElement("ul");
     div.className = "pagination";
@@ -53,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       a.addEventListener("click", e => {
         const pageSelected = e.target.textContent;
         const links = ul.querySelectorAll("a");
-        showPage(studentList, pageSelected);
+        showPage(list, pageSelected);
         e.target.className = "active";
         for (let i = 0; i < links.length; i++) {
           if (links[i] !== e.target) {
@@ -62,17 +70,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-    // set first page button as active
-    ul.firstChild.firstChild.className = "active";
-    pageDiv.appendChild(div);
+    if (numberOfPages > 1) {
+      ul.firstChild.firstChild.className = "active";
+      pageDiv.appendChild(div);
+    }
+  };
+
+  // hides all divs of a given list
+
+  const removePageLinks = () => {
+    const pageLinksDiv = document.querySelector(".pagination");
+    if (pageLinksDiv) {
+      pageDiv.removeChild(pageLinksDiv);
+    }
   };
 
   // Search filter function * returns filtered divs
 
   const searchNames = (input, names) => {
     const filteredList = [];
-
-    clearPageLinks();
+    noResult.style.display = "none";
+    removePageLinks();
     for (let i = 0; i < names.length; i++) {
       if (
         names[i].textContent.toLowerCase().indexOf(input.value.toLowerCase()) >
@@ -84,18 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
         names[i].parentNode.parentNode.style.display = "none";
       }
     }
-
-    return filteredList;
-  };
-
-  // hides all divs of a given list
-
-  const clearPageLinks = () => {
-    const pageDiv = document.querySelector(".page");
-    const pageLinksDiv = document.querySelector(".pagination");
-    if (pageLinksDiv) {
-      pageDiv.removeChild(pageLinksDiv);
+    if (filteredList.length === 0) {
+      noResult.style.display = "";
     }
+    return filteredList;
   };
 
   appendPageLinks(studentList);
