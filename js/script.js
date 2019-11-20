@@ -3,11 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const studentList = document.querySelectorAll(".student-item");
   const ItemsPerPage = 10;
-
   const pageHeaderDiv = document.querySelector(".page-header");
+
   const searchDiv = document.createElement("div");
   const searchInput = document.createElement("input");
   const searchButton = document.createElement("button");
+  const studentNames = document.querySelectorAll("H3");
 
   searchButton.textContent = "Search";
   searchInput.type = "text";
@@ -66,6 +67,49 @@ document.addEventListener("DOMContentLoaded", () => {
     pageDiv.appendChild(div);
   };
 
+  // Search filter function * returns filtered divs
+
+  const searchNames = (input, names) => {
+    const filteredList = [];
+
+    clearPageLinks();
+    for (let i = 0; i < names.length; i++) {
+      if (
+        names[i].textContent.toLowerCase().indexOf(input.value.toLowerCase()) >
+        -1
+      ) {
+        names[i].parentNode.parentNode.style.display = "";
+        filteredList.push(names[i].parentNode.parentNode);
+      } else {
+        names[i].parentNode.parentNode.style.display = "none";
+      }
+    }
+
+    return filteredList;
+  };
+
+  // hides all divs of a given list
+
+  const clearPageLinks = () => {
+    const pageDiv = document.querySelector(".page");
+    const pageLinksDiv = document.querySelector(".pagination");
+    if (pageLinksDiv) {
+      pageDiv.removeChild(pageLinksDiv);
+    }
+  };
+
   appendPageLinks(studentList);
   showPage(studentList, 1);
+
+  searchInput.addEventListener("keyup", () => {
+    const seachedDivs = searchNames(searchInput, studentNames);
+    appendPageLinks(seachedDivs);
+    showPage(seachedDivs, 1);
+  });
+
+  searchButton.addEventListener("click", () => {
+    const seachedDivs = searchNames(searchInput, studentNames);
+    appendPageLinks(seachedDivs);
+    showPage(seachedDivs, 1);
+  });
 });
